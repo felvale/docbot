@@ -1,4 +1,4 @@
-#!/bin/usr/python3.5
+#!/usr/bin/python3
 """
 Starting module for the docbot application
 This application will be a slack (initially) bot to query \
