@@ -32,7 +32,7 @@ class ConfigManager:
         if self.check_config():
             self.cur_config = configparser.ConfigParser()
             self.cur_config.read('bot.ini')
-        
+
 
     def get_param(self, section, param):
         """
@@ -49,8 +49,7 @@ class ConfigManager:
         Generates an default config file with necessary params
         """
         self.cur_config = configparser.ConfigParser()
-        self.cur_config['DBDATA'] = {'BackEnd': 'app.backend.db.postgre',\
-                                   'Host': '',                        \
+        self.cur_config['DBDATA'] = {'Host': '',                        \
                                    'User': '',                        \
                                    'Password': ''}
         self.save_config()
