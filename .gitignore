@@ -1,2 +1,3 @@
 setdev.sh
+*.ini
 __pycache__

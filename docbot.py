@@ -6,7 +6,7 @@ information related to wathever is asked \
 by the user
 """
 import sys
-from app.config import configmanager
+from app.config.configmanager import ConfigManager
 
 def print_options():
     """
@@ -36,14 +36,15 @@ def main():
     elif 'startbot' in sys.argv:
         print('Bot is starting')
     elif 'make' in sys.argv:
-        has_config = configmanager.check_config()
+        confman = ConfigManager.get_manager()
+        has_config = confman.check_config()
         if has_config:
             print('.ini file already exists')
             conf = input('Would you like to replace it for a default .ini? (y/N)')
             while True:
                 if conf == 'y' or conf == 'Y':
-                    configmanager.fill_default()
-                    configmanager.save_config()
+                    confman.make_config()
+                    confman.save_config()
                     break
                 elif conf == 'n' or conf == 'N' or conf == '':
                     print('.ini file exists and wasn\'t altered')
@@ -51,7 +52,8 @@ def main():
                 else:
                     conf = input('Please input either y or n')
         else:
-            configmanager.make_config()
+            print('Config file not found! Generating default file')
+            confman.make_config()
     elif 'makedb' in sys.argv:
         print('Veryfing db and creating necessary tables')
     elif 'help' in sys.argv:
