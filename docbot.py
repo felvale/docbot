@@ -21,9 +21,6 @@ def print_options():
     print('make      - checks if config file exists     ')
     print('                 generating an default file  ')
     print('                 if it doesn\'t              ')
-    print('makedb    - checks if the configured database')
-    print('                 has the necessary tables and')
-    print('                 is built correctly          ')
     print('startbot  - starts the bot                   ')
 
 def main():

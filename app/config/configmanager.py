@@ -31,7 +31,7 @@ class ConfigManager:
         """
         if self.check_config():
             self.cur_config = configparser.ConfigParser()
-            self.cur_config.read('bot.ini')
+            self.cur_config.read('.ini')
 
 
     def get_param(self, section, param):
@@ -49,9 +49,13 @@ class ConfigManager:
         Generates an default config file with necessary params
         """
         self.cur_config = configparser.ConfigParser()
+        #Data Base related configuration
         self.cur_config['DBDATA'] = {'Host': '',                        \
                                    'User': '',                        \
                                    'Password': ''}
+        #Slack bot related configuration
+        self.cur_config['SLACKDATA'] = {'BotId': '',                        \
+                                   'BotToken': ''}
         self.save_config()
 
     def check_config(self):
@@ -59,7 +63,7 @@ class ConfigManager:
         Check if configuration file exists
         """
         if self.cur_config is None:
-            exist = os.path.exists(os.getcwd() + '/bot.ini')
+            exist = os.path.exists(os.getcwd() + '/.ini')
         else:
             exist = True
         return exist
@@ -68,5 +72,5 @@ class ConfigManager:
         """
         Check if configuration file exists
         """
-        with open('bot.ini', 'w') as configfile:
+        with open('.ini', 'w') as configfile:
             self.cur_config.write(configfile)
