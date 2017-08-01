@@ -40,7 +40,7 @@ def main():
         has_config = confman.check_config()
         if has_config:
             print('.ini file already exists')
-            conf = input('Would you like to replace it for a default .ini? (y/N)')
+            conf = input('Would you like to replace it for a default .ini? (y/N):')
             while True:
                 if conf == 'y' or conf == 'Y':
                     confman.make_config()
