@@ -3,6 +3,7 @@ Module responsible for creating, loading and mantaining \
 the application ini file
 """
 import os
+import json
 import configparser
 
 class ConfigManager:
@@ -34,13 +35,16 @@ class ConfigManager:
             self.cur_config.read('.ini')
 
 
-    def get_param(self, section, param):
+    def get_param(self, section, param, aslist=False):
         """
         Get parameter from config file based on section and parameter name
         """
         if section in self.cur_config:
             if param in self.cur_config[section]:
-                return self._config[section][param]
+                if not aslist:
+                    return self._config[section][param]
+                else:
+                    return json.load(self._config[section][param])
 
         return None
 
@@ -56,6 +60,7 @@ class ConfigManager:
         #Slack bot related configuration
         self.cur_config['SLACKDATA'] = {'BotId': '',                        \
                                    'BotToken': ''}
+        self.cur_config['INSTALLEDMODULES'] = {'InstalledModules': '[]'}
         self.save_config()
 
     def check_config(self):

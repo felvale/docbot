@@ -7,7 +7,7 @@ by the user
 """
 import sys
 from app.config.configmanager import ConfigManager
-from app.db import makedb
+from app.db.makedb import makedb
 
 def print_options():
     """
@@ -22,6 +22,7 @@ def print_options():
     print('make      - checks if config file exists     ')
     print('                 generating an default file  ')
     print('                 if it doesn\'t              ')
+    print('make-db   - builds base DB                   ')
     print('new-inten - prompts for data to create a new ')
     print('                 intention to the program    ')
     print('startbot  - starts the bot                   ')
@@ -58,6 +59,7 @@ def main():
         print('Creating intent')
     elif 'make-db' in sys.argv:
         print('Building db')
+        makedb()
     elif 'help' in sys.argv:
         print_options()
     else:
