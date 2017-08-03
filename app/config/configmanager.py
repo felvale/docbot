@@ -42,9 +42,9 @@ class ConfigManager:
         if section in self.cur_config:
             if param in self.cur_config[section]:
                 if not aslist:
-                    return self._config[section][param]
+                    return self.cur_config.get(section, param)
                 else:
-                    return json.load(self._config[section][param])
+                    return json.loads(self.cur_config.get(section, param))
 
         return None
 
