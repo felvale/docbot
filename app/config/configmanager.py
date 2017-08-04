@@ -43,10 +43,16 @@ class ConfigManager:
             if param in self.cur_config[section]:
                 if not aslist:
                     return self.cur_config.get(section, param)
-                else:
-                    return json.loads(self.cur_config.get(section, param))
+
+                return json.loads(self.cur_config.get(section, param))
 
         return None
+
+    def set_param(self, section, param, value):
+        """
+        Set parameter on config file based on section and parameter name
+        """
+        self.cur_config.set(section, param, value)
 
     def make_config(self):
         """
@@ -55,11 +61,14 @@ class ConfigManager:
         self.cur_config = configparser.ConfigParser()
         #Data Base related configuration
         self.cur_config['DBDATA'] = {'Host': '',                        \
-                                   'User': '',                        \
-                                   'Password': ''}
+                                   'User': '',                          \
+                                   'Password': '', ''                   \
+                                   'maxconnections': '5'}
         #Slack bot related configuration
         self.cur_config['SLACKDATA'] = {'BotId': '',                        \
                                    'BotToken': ''}
+        self.cur_config['IO'] = {'inputmodule': 'app.io.consoleinput',      \
+                                   'outputmodule': 'app.io.consoleoutput'}
         self.cur_config['INSTALLEDMODULES'] = {'InstalledModules': '[]'}
         self.save_config()
 
