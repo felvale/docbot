@@ -154,7 +154,7 @@ def make_extensions(conn):
     '''
     Call installed modules make_db
     '''
-    modules = ConfigManager.get_manager().get_param('INSTALLEDMODULES', 'installedmodules', True)
+    modules = ConfigManager.get_instance().get_param('INSTALLEDMODULES', 'installedmodules', True)
     for module in modules:
         print('Preparing DB for ' + module)
         try:

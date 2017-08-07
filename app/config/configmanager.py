@@ -13,7 +13,7 @@ class ConfigManager:
     _config = None
 
     @staticmethod
-    def get_manager():
+    def get_instance():
         """
         Get class current instance or instantiate if \
         theres none
@@ -68,7 +68,8 @@ class ConfigManager:
         self.cur_config['SLACKDATA'] = {'BotId': '',                        \
                                    'BotToken': ''}
         self.cur_config['IO'] = {'inputmodule': 'app.io.consoleinput',      \
-                                   'outputmodule': 'app.io.consoleoutput'}
+                                   'outputmodule': 'app.io.consoleoutput',  \
+                                   'requestfrequency': '1000'}
         self.cur_config['INSTALLEDMODULES'] = {'InstalledModules': '[]'}
         self.save_config()
 

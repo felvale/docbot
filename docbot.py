@@ -37,7 +37,7 @@ def main():
     elif 'startbot' in sys.argv:
         print('Bot is starting')
     elif 'make' in sys.argv:
-        confman = ConfigManager.get_manager()
+        confman = ConfigManager.get_instance()
         has_config = confman.check_config()
         if has_config:
             print('.ini file already exists')

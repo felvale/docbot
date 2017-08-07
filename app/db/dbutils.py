@@ -3,6 +3,7 @@ Class regarding conections and other DB utilities
 '''
 from threading import Lock
 from collections import deque
+from app.db.makedb import add_intention
 from app.config.configmanager import ConfigManager
 import psycopg2
 
@@ -22,11 +23,11 @@ class DBUtils():
         self._cur_connections = 0
         self._connection_lock = Lock()
         self._conection_string = 'host={0} user={1} dbname={1} password={2}'
-        host = ConfigManager.get_manager().\
+        host = ConfigManager.get_instance().\
                         get_param('DBDATA', 'host')
-        user = ConfigManager.get_manager().\
+        user = ConfigManager.get_instance().\
                         get_param('DBDATA', 'user')
-        password = ConfigManager.get_manager().\
+        password = ConfigManager.get_instance().\
                         get_param('DBDATA', 'password')
         self._conection_string = self._conection_string.format(host, user, password)
 
@@ -51,7 +52,7 @@ class DBUtils():
         if self._connections:
             conn = self._connections.popleft()
         else:
-            if self._cur_connections < int(ConfigManager.get_manager().\
+            if self._cur_connections < int(ConfigManager.get_instance().\
                                         get_param('DBDATA', 'maxconnections')):
                 conn = psycopg2.connect(self._conection_string)
                 self._cur_connections += 1
@@ -66,3 +67,22 @@ class DBUtils():
         '''
         conn.rollback()
         self._connections.append(conn)
+
+    def make_intent(self):
+        '''
+        Creates a new intention propting for the necessary data
+        '''
+        intent_name = input('Inform the intention name: ')
+        intent_description = input('Give yout intention an description: ')
+        intent_module = input('Determine the module to process the intention input: ')
+
+        intent_string = []
+        while True:
+            in_string = input('Input a sentence that would refer to this ' \
+            + 'intention (or \\q to stop): ')
+            if '\\q' in in_string:
+                break
+            else:
+                intent_string.append(in_string)
+        conn = self.get_connection()
+        add_intention(intent_name, intent_description, intent_module, intent_string, conn)
