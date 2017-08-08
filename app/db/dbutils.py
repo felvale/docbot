@@ -68,6 +68,13 @@ class DBUtils():
         conn.rollback()
         self._connections.append(conn)
 
+    def clean_connections(self):
+        '''
+        Clean all current sections to DB
+        '''
+        for conn in self._connections:
+            conn.close()
+
     def make_intent(self):
         '''
         Creates a new intention propting for the necessary data

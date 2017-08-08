@@ -69,7 +69,7 @@ class ConfigManager:
                                    'BotToken': ''}
         self.cur_config['IO'] = {'inputmodule': 'app.io.consoleinput',      \
                                    'outputmodule': 'app.io.consoleoutput',  \
-                                   'requestfrequency': '1000'}
+                                   'requestfrequency': '1'}
         self.cur_config['INSTALLEDMODULES'] = {'InstalledModules': '[]'}
         self.save_config()
 

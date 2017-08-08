@@ -8,6 +8,7 @@ by the user
 import sys
 from app.config.configmanager import ConfigManager
 from app.db.makedb import makedb
+from app.db.dbutils import DBUtils
 
 def print_options():
     """
@@ -56,7 +57,7 @@ def main():
             print('Config file not found! Generating default file')
             confman.make_config()
     elif 'new-inten' in sys.argv:
-        print('Creating intent')
+        DBUtils.get_instance().make_intent()
     elif 'make-db' in sys.argv:
         print('Building db')
         makedb()

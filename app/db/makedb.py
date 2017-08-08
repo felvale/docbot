@@ -31,8 +31,8 @@ def makedb():
         if not search_role(conn, bot_user):
             create_role(conn, bot_user)
 
-        if not search_db(conn):
-            create_db(conn)
+        if not search_db(conn, bot_user):
+            create_db(conn, bot_user)
 
         conn.close()
         for index in range(0, 3):
@@ -46,8 +46,8 @@ def makedb():
                 break
             except psycopg2.OperationalError:
                 print('Incorrect password')
-        if not search_schema(conn):
-            create_schema(conn)
+        if not search_schema(conn, bot_user):
+            create_schema(conn, bot_user)
 
         create_tables(conn)
         conn.commit()
@@ -57,7 +57,7 @@ def makedb():
         print('Error connecting to DB and running commands, message follows')
         print(excep.message)
 
-def search_db(conn):
+def search_db(conn, botuser):
     '''
     Searches de database to verify if the application database was already created
     '''
@@ -65,20 +65,20 @@ def search_db(conn):
     cur.execute('select datname from pg_database')
     res = cur.fetchall()
     for row in res:
-        if row[0] == 'docbot':
+        if row[0] == botuser:
             print('App base already created')
             cur.close()
             return True
 
     cur.close()
 
-def create_db(conn):
+def create_db(conn, botuser):
     '''
     Creates an database for the application to use
     '''
     cur = conn.cursor()
-    print('Couldn\' find the app base on DB, creating docbot database')
-    cur.execute('CREATE DATABASE docbot WITH OWNER docbot')
+    print('Couldn\' find the app base on DB, creating ' + botuser + ' database')
+    cur.execute('CREATE DATABASE ' + botuser + ' WITH OWNER ' + botuser)
     print('DB created')
     cur.close()
 
@@ -101,14 +101,14 @@ def create_role(conn, botuser):
     Creates the application user
     '''
     app_password = getpass.getpass('Inform the APP user password: ')
-    cur = conn.cursor
+    cur = conn.cursor()
     print('Couldn\' find the app user on DB, creating' + botuser + ' user')
-    cur.execute('CREATE ROLE %s WITH ENCRYPTED PASSWORD %s', (botuser, app_password,))
-    cur.execute('ALTER ROLE %s WITH LOGIN', (botuser, app_password,))
+    cur.execute('CREATE ROLE ' + botuser + ' WITH ENCRYPTED PASSWORD %s', (app_password,))
+    cur.execute('ALTER ROLE ' + botuser + ' WITH LOGIN')
     print('App user created')
     cur.close()
 
-def search_schema(conn):
+def search_schema(conn, botuser):
     '''
     checks if the table schema was already created
     '''
@@ -116,19 +116,19 @@ def search_schema(conn):
     cur.execute('select nspname from pg_namespace')
     res = cur.fetchall()
     for row in res:
-        if row[0] == 'docbot':
+        if row[0] == botuser:
             print('App schema already created')
             cur.close()
             return  True
     cur.close()
 
-def create_schema(conn):
+def create_schema(conn, botuser):
     '''
     Creates applicatinos tables schema
     '''
     cur = conn.cursor()
     print('Couldn\' find the app schema on DB, creating docbot schema')
-    cur.execute('CREATE SCHEMA AUTHORIZATION docbot')
+    cur.execute('CREATE SCHEMA AUTHORIZATION ' + botuser)
     print('Schema created')
     cur.close()
 
