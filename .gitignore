@@ -1,3 +1,4 @@
 setdev.sh
 *.ini
 __pycache__
+.vscode
