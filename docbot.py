@@ -9,6 +9,7 @@ import sys
 from app.config.configmanager import ConfigManager
 from app.db.makedb import makedb
 from app.db.dbutils import DBUtils
+from app.bot.bot import MainBot
 
 def print_options():
     """
@@ -36,7 +37,8 @@ def main():
         print_options()
         sys.exit(0)
     elif 'startbot' in sys.argv:
-        print('Bot is starting')
+        bot = MainBot()
+        bot.start_bot()
     elif 'make' in sys.argv:
         confman = ConfigManager.get_instance()
         has_config = confman.check_config()
