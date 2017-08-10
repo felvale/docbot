@@ -7,6 +7,7 @@ from importlib import import_module
 from app.bot.distributor import Distributor
 from app.threads.stopablethread import StopableThread
 from app.config.configmanager import ConfigManager
+from app.bot.dao import interpreterdao
 
 class Interpreter(StopableThread):
     '''
@@ -44,12 +45,22 @@ class Interpreter(StopableThread):
         '''
         Do interpretation
         '''
-        temp_answer = 'Interpreting req on thread ' + self._thread_reference +  \
-        '\nUser: ' + req['user'] +                                                \
-        '\nUserId: ' + req['userid'] +                                            \
-        '\nChannel: ' + req['channel'] +                                          \
-        '\nMessage: ' + req['message'] +                                          \
-        '\nHasLast: False'
+        intent = None
+        #attempt to find an intention that fits all input text
+        found, int_name, int_module = interpreterdao.get_intention(req['message'], True)
+        if not found:
+            #attempt to find an intention that better fits the input
+            found, int_name, int_module = interpreterdao.get_intention(req['message'], False)
 
-        req['answer'] = temp_answer
+        if found:
+            print('Went with ' + int_name)
+            try:
+                intent = import_module(int_module)
+            except ImportError:
+                print('Could not load intention module')
+
+        if intent is not None:
+            intent.run_intent(req)
+        else:
+            req['answer'] = 'I don\'t know what you mean'
         self._output_module.do_output(req)

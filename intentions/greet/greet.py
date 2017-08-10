@@ -10,14 +10,13 @@ def run_intent(req):
     when the system detecs this intent if configured correctly on \
     the intentions table
     '''
-    print(req)
-    return 'Hi!'
+    req['answer'] = 'Hi!'
 
 def prepare_db(conn):
     '''
     Create all the necessary DB tables and data for this module
     '''
     makedb.add_intention('greet', 'intention designed to greet back the user', \
-                            'intention.greet.greet', ['Hello, how are you doing?', \
+                            'intentions.greet.greet', ['Hello, how are you doing?', \
                             'Hey, everything ok?', \
                             'Hi', 'Hello', 'hey'], conn)

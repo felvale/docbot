@@ -48,25 +48,27 @@ class DBUtils():
         Get DB connection from connection pool
         '''
 
-        self._connection_lock.acquire()
-        if self._connections:
-            conn = self._connections.popleft()
-        else:
-            if self._cur_connections < int(ConfigManager.get_instance().\
-                                        get_param('DBDATA', 'maxconnections')):
-                conn = psycopg2.connect(self._conection_string)
-                self._cur_connections += 1
+        with self._connection_lock:
+            if self._connections:
+                conn = self._connections.popleft()
             else:
-                raise MaxConnectionException('DB connections pool has already reached it\'s limit')
-        self._connection_lock.release()
-        return conn
+                if self._cur_connections < int(ConfigManager.get_instance().\
+                                            get_param('DBDATA', 'maxconnections')):
+                    conn = psycopg2.connect(self._conection_string)
+                    self._cur_connections += 1
+                else:
+                    raise MaxConnectionException    \
+                            ('DB connections pool has already reached it\'s limit')
+            return conn
+        return None
 
     def close_connection(self, conn):
         '''
         Returns connection to connection pool, rolling back the transaction
         '''
         conn.rollback()
-        self._connections.append(conn)
+        with self._connection_lock:
+            self._connections.append(conn)
 
     def clean_connections(self):
         '''
